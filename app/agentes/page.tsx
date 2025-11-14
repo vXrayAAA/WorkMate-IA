@@ -125,18 +125,22 @@ function AgentesContent() {
         body: JSON.stringify({
           agent: selectedAgent,
           message: userMessageText,
-          conversationHistory: messages.map((msg) => ({
-            role: msg.sender === 'user' ? 'user' : 'assistant',
-            content: msg.text,
-          })),
+          conversationHistory: messages,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Erro na resposta da API');
+        console.error('API error:', response.status, response.statusText);
+        throw new Error(`Erro na resposta da API: ${response.status}`);
       }
 
       const data = await response.json();
+
+      // Verifica se há resposta válida
+      if (!data.response) {
+        console.error('Resposta inválida:', data);
+        throw new Error('Resposta da API está vazia');
+      }
 
       const agentResponse: Message = {
         id: messages.length + 2,
