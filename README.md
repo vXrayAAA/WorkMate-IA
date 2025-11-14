@@ -197,7 +197,7 @@ Este projeto foi desenvolvido para fins educacionais como parte da **Global Solu
 ## 👥 Autores
 
 **Equipe WorkMate AI**
-- Desenvolvido para FIAP - Global Solution 2024
+- Desenvolvido para FIAP - Global Solution 2025
 - GitHub: [@vXrayAAA](https://github.com/vXrayAAA)
 
 ---
@@ -211,7 +211,7 @@ Se você encontrar algum problema ou tiver sugestões:
 
 ---
 
-## 🎓 Global Solution 2024 - FIAP
+## 🎓 Global Solution 2025 - FIAP
 
 Este projeto foi desenvolvido como solução para o desafio da Global Solution 2024, focando em:
 
