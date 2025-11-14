@@ -1,6 +1,6 @@
 # 🤖 WorkMate AI
 
-**WorkMate AI** é uma plataforma inovadora de agentes de IA especializados para aumentar a produtividade no ambiente de trabalho. Desenvolvido como parte da **Global Solution 2024 - FIAP**.
+**WorkMate AI** é uma plataforma inovadora de agentes de IA especializados para aumentar a produtividade no ambiente de trabalho. Desenvolvido como parte da **Global Solution 2025 - FIAP**.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vXrayAAA/WorkMate-IA)
 
