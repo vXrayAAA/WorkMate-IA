@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -67,7 +67,8 @@ const agents = {
   },
 };
 
-export default function Agentes() {
+// Componente interno que usa useSearchParams
+function AgentesContent() {
   const searchParams = useSearchParams();
   const agentParam = searchParams.get('agent') || 'datamate';
   const [selectedAgent, setSelectedAgent] = useState(agentParam);
@@ -367,5 +368,21 @@ export default function Agentes() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Componente principal com Suspense
+export default function Agentes() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando agentes...</p>
+        </div>
+      </div>
+    }>
+      <AgentesContent />
+    </Suspense>
   );
 }
