@@ -31,13 +31,15 @@
 
 ### 🔌 Integração com IAs
 
-Suporte para múltiplas APIs de IA:
-- OpenAI (GPT-4, GPT-3.5)
-- Anthropic (Claude)
-- Google Gemini
-- Groq (Llama 3.1)
-- Ollama (local)
-- Modo Mock (para demonstração)
+Powered by **Vercel AI SDK** com suporte para múltiplas APIs:
+- OpenAI (GPT-4, GPT-4o-mini)
+- Anthropic (Claude 3.5 Sonnet)
+- Google Gemini (1.5 Flash, 1.5 Pro)
+- Modo Mock (demonstração sem API)
+
+**Streaming nativo** para respostas em tempo real! ⚡
+
+📖 Veja [VERCEL_AI_SDK.md](./VERCEL_AI_SDK.md) para guia completo de configuração.
 
 ---
 
