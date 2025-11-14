@@ -56,16 +56,18 @@ export async function POST(request: Request) {
     }
 
     // Modo streaming com Vercel AI SDK
-    console.log(`AI Provider: ${AI_PROVIDER.toUpperCase()}`);
+    console.log(` AI Provider: ${AI_PROVIDER.toUpperCase()}`);
 
     // Prepara mensagens para o modelo
     const messages = [
       ...conversationHistory.map((msg: any) => ({
         role: msg.sender === 'user' ? 'user' : 'assistant',
-        content: msg.text
+        content: msg.text || msg.content || ''
       })),
       { role: 'user', content: message }
     ];
+
+    console.log(' Mensagens preparadas:', messages.length);
 
     // Gera resposta com streaming
     const result = await streamText({
