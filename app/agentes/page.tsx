@@ -17,6 +17,9 @@ import {
   faComments,
 } from '@fortawesome/free-solid-svg-icons';
 
+// Força renderização dinâmica (não faz prerender)
+export const dynamic = 'force-dynamic';
+
 interface Message {
   id: number;
   text: string;
