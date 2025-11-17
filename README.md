@@ -109,30 +109,9 @@ GOOGLE_API_KEY=AIza...
 AI_PROVIDER=google
 ```
 
-Veja mais opções em [CONFIGURAR_IA_GRATUITA.md](./CONFIGURAR_IA_GRATUITA.md)
-
 ---
 
-## 🚀 Deploy na Vercel
 
-1. **Faça fork deste repositório**
-
-2. **Importe no Vercel:**
-   - Acesse: https://vercel.com/
-   - Clique em "Add New Project"
-   - Selecione este repositório
-
-3. **Configure a variável de ambiente:**
-   - Adicione: `AI_PROVIDER` = `mock`
-   - Ou configure uma API de IA real
-
-4. **Deploy!**
-   - A Vercel detecta automaticamente Next.js
-   - Build e deploy em ~2 minutos
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vXrayAAA/WorkMate-IA)
-
----
 
 ## 📁 Estrutura do Projeto
 
@@ -190,7 +169,7 @@ Contribuições são bem-vindas! Por favor:
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins educacionais como parte da **Global Solution 2024 - FIAP**.
+Este projeto foi desenvolvido para fins educacionais como parte da **Global Solution 2025 - FIAP**.
 
 ---
 
