@@ -89,11 +89,11 @@ export default function Home() {
       <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 fixed w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-                <FontAwesomeIcon icon={faRobot} className="text-white text-xl" />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 gradient-bg rounded-xl flex items-center justify-center">
+                <FontAwesomeIcon icon={faRobot} className="text-white text-lg sm:text-xl" />
               </div>
-              <span className="text-2xl font-bold gradient-text">WorkMate AI</span>
+              <span className="text-xl sm:text-2xl font-bold gradient-text">WorkMate AI</span>
             </div>
 
             <div className="hidden md:flex items-center space-x-8">
@@ -113,27 +113,35 @@ export default function Home() {
                 Começar Agora
               </Link>
             </div>
+            
+            {/* Mobile Menu Button */}
+            <Link
+              href="/dashboard"
+              className="md:hidden px-4 py-2 gradient-bg text-white rounded-lg font-semibold text-sm"
+            >
+              Entrar
+            </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 opacity-70"></div>
         <div className="max-w-7xl mx-auto relative">
-          <div className="text-center max-w-4xl mx-auto mb-16">
-            <div className="inline-block mb-4 px-4 py-2 bg-white rounded-full shadow-sm">
-              <span className="text-sm font-semibold gradient-text">
+          <div className="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
+            <div className="inline-block mb-4 px-3 sm:px-4 py-2 bg-white rounded-full shadow-sm">
+              <span className="text-xs sm:text-sm font-semibold gradient-text">
                 <FontAwesomeIcon icon={faBrain} className="mr-2" />
                 Potencializado por IA Avançada
               </span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-gray-900 mb-4 sm:mb-6 px-4">
               Seu Time de{' '}
               <span className="gradient-text">5 Agentes IA</span>
               {' '}trabalhando para você
             </h1>
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed px-4">
               Pare de fazer tudo sozinho. Delegue para agentes especializados que entendem seu contexto,
               aprendem com você e entregam resultados enquanto você foca no que realmente importa.
             </p>
@@ -157,15 +165,15 @@ export default function Home() {
           {/* Trust Badges */}
           <div className="flex flex-wrap justify-center gap-8 items-center mb-16 opacity-70">
             <div className="text-center">
-              <div className="text-sm font-semibold text-gray-600">🎓 FIAP</div>
+              <div className="text-sm font-semibold text-gray-600"> FIAP</div>
               <div className="text-xs text-gray-500">Global Solution</div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-semibold text-gray-600">🌍 ODS</div>
+              <div className="text-sm font-semibold text-gray-600"> ODS</div>
               <div className="text-xs text-gray-500">Trabalho Decente</div>
             </div>
             <div className="text-center">
-              <div className="text-sm font-semibold text-gray-600">🤖 AI Powered</div>
+              <div className="text-sm font-semibold text-gray-600"> AI Powered</div>
               <div className="text-xs text-gray-500">Tecnologia Avançada</div>
             </div>
           </div>
@@ -173,18 +181,18 @@ export default function Home() {
       </section>
 
       {/* Problem Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 px-4">
               O trabalho moderno está <span className="gradient-text">quebrado</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Profissionais gastam mais tempo gerenciando trabalho do que fazendo trabalho.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {problems.map((problem, index) => (
               <div
                 key={index}
@@ -203,19 +211,19 @@ export default function Home() {
       </section>
 
       {/* Solution Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 px-4 lg:px-0">
                 Uma plataforma. <span className="gradient-text">Cinco especialistas.</span>
               </h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed px-4 lg:px-0">
                 WorkMate AI não é só mais uma ferramenta de IA. É seu time completo de assistentes especializados,
                 cada um expert em uma área crítica do seu trabalho.
               </p>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4 px-4 lg:px-0">
                 <div className="flex items-start space-x-4">
                   <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FontAwesomeIcon icon={faCheck} className="text-green-600" />
@@ -287,18 +295,18 @@ export default function Home() {
       </section>
 
       {/* Agents Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 px-4">
               Conheça seu <span className="gradient-text">time IA</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
               Cinco agentes especializados, um objetivo: multiplicar sua produtividade
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {agents.map((agent, index) => (
               <div
                 key={index}
@@ -354,16 +362,16 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary to-secondary relative overflow-hidden">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-primary to-secondary relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full animate-blob"></div>
           <div className="absolute bottom-10 right-10 w-80 h-80 bg-white rounded-full animate-blob" style={{ animationDelay: '2s' }}></div>
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 px-4">
             Pronto para trabalhar mais inteligente?
           </h2>
-          <p className="text-xl text-white/90 mb-8">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 px-4">
             Junte-se a milhares de profissionais que já multiplicaram sua produtividade
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -381,24 +389,24 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
+            <div className="sm:col-span-2 md:col-span-1">
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center">
                   <FontAwesomeIcon icon={faRobot} className="text-white" />
                 </div>
-                <span className="text-xl font-bold">WorkMate AI</span>
+                <span className="text-lg sm:text-xl font-bold">WorkMate AI</span>
               </div>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-400 text-xs sm:text-sm">
                 Seu time de 5 agentes IA especializados em produtividade
               </p>
             </div>
 
             <div>
-              <h3 className="font-bold mb-4">Produto</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <h3 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base">Produto</h3>
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-400">
                 <li><Link href="/agentes" className="hover:text-white transition">Agentes IA</Link></li>
                 <li><Link href="/dashboard" className="hover:text-white transition">Dashboard</Link></li>
                 <li><Link href="/" className="hover:text-white transition">Preços</Link></li>
@@ -406,8 +414,8 @@ export default function Home() {
             </div>
 
             <div>
-              <h3 className="font-bold mb-4">Empresa</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <h3 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base">Empresa</h3>
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-400">
                 <li><Link href="/" className="hover:text-white transition">Sobre</Link></li>
                 <li><Link href="/" className="hover:text-white transition">Blog</Link></li>
                 <li><Link href="/" className="hover:text-white transition">Carreiras</Link></li>
@@ -415,8 +423,8 @@ export default function Home() {
             </div>
 
             <div>
-              <h3 className="font-bold mb-4">Suporte</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
+              <h3 className="font-bold mb-3 sm:mb-4 text-sm sm:text-base">Suporte</h3>
+              <ul className="space-y-2 text-xs sm:text-sm text-gray-400">
                 <li><Link href="/" className="hover:text-white transition">Ajuda</Link></li>
                 <li><Link href="/" className="hover:text-white transition">Documentação</Link></li>
                 <li><Link href="/" className="hover:text-white transition">Contato</Link></li>
@@ -424,7 +432,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+          <div className="border-t border-gray-800 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-gray-400">
             <p>© 2025 WorkMate AI - FIAP Global Solution. Todos os direitos reservados.</p>
           </div>
         </div>

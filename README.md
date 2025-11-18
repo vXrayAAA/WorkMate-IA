@@ -200,16 +200,7 @@ Este projeto foi desenvolvido como solução para o desafio da Global Solution 2
 - ✅ Deploy em produção
 - ✅ Código limpo e documentado
 
----
 
-## 🙏 Agradecimentos
 
-- **FIAP** - Pela oportunidade e desafio
-- **Vercel** - Plataforma de deploy
-- **OpenAI, Anthropic, Google, Groq** - APIs de IA
-- **Next.js Team** - Framework incrível
 
----
-
-**⭐ Se este projeto foi útil, considere dar uma estrela no GitHub!**
 

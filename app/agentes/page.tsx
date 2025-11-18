@@ -12,12 +12,12 @@ import {
   faGraduationCap,
   faRobot,
   faPaperPlane,
-  faHome,
-  faChartLine,
-  faComments,
+  faBars,
+  faPlus,
+  faEllipsisV,
+  faArrowUp,
 } from '@fortawesome/free-solid-svg-icons';
 
-// Força renderização dinâmica (não faz prerender)
 export const dynamic = 'force-dynamic';
 
 interface Message {
@@ -70,7 +70,6 @@ const agents = {
   },
 };
 
-// Componente interno que usa useSearchParams
 function AgentesContent() {
   const searchParams = useSearchParams();
   const agentParam = searchParams.get('agent') || 'datamate';
@@ -78,12 +77,13 @@ function AgentesContent() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const agent = agents[selectedAgent as keyof typeof agents];
 
   useEffect(() => {
-    // Mensagem inicial do agente
     setMessages([
       {
         id: 1,
@@ -98,12 +98,17 @@ function AgentesContent() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [inputText]);
+
   const handleSend = async () => {
     if (!inputText.trim()) return;
 
     const userMessageText = inputText;
-
-    // Adiciona mensagem do usuário
     const userMessage: Message = {
       id: messages.length + 1,
       text: userMessageText,
@@ -116,12 +121,9 @@ function AgentesContent() {
     setIsTyping(true);
 
     try {
-      // Chama API real do agente
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           agent: selectedAgent,
           message: userMessageText,
@@ -129,18 +131,11 @@ function AgentesContent() {
         }),
       });
 
-      if (!response.ok) {
-        console.error('API error:', response.status, response.statusText);
-        throw new Error(`Erro na resposta da API: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`Erro na resposta da API: ${response.status}`);
+      
       const data = await response.json();
 
-      // Verifica se há resposta válida
-      if (!data.response) {
-        console.error('Resposta inválida:', data);
-        throw new Error('Resposta da API está vazia');
-      }
+      if (!data.response) throw new Error('Resposta da API está vazia');
 
       const agentResponse: Message = {
         id: messages.length + 2,
@@ -153,7 +148,6 @@ function AgentesContent() {
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
       
-      // Fallback para resposta mock em caso de erro
       const agentResponse: Message = {
         id: messages.length + 2,
         text: getAgentResponse(selectedAgent, userMessageText),
@@ -199,6 +193,13 @@ function AgentesContent() {
     return agentResponses[Math.floor(Math.random() * agentResponses.length)];
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
   const quickSuggestions = {
     datamate: ['Analisar vendas', 'Criar relatório', 'Identificar tendências'],
     textmate: ['Redigir email', 'Revisar documento', 'Criar apresentação'],
@@ -208,126 +209,163 @@ function AgentesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-                <FontAwesomeIcon icon={faRobot} className="text-white text-xl" />
-              </div>
-              <span className="text-2xl font-bold gradient-text">WorkMate AI</span>
+    <div className="flex h-screen bg-gray-50 overflow-hidden">
+      {/* Sidebar - estilo ChatGPT */}
+      <div className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out flex flex-col`}>
+        {/* Header da Sidebar */}
+        <div className="p-4 border-b border-gray-700">
+          <button
+            onClick={() => setMessages([{ id: 1, text: agent.greeting, sender: 'agent', timestamp: new Date() }])}
+            className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-800 transition group"
+          >
+            <div className="flex items-center space-x-2">
+              <FontAwesomeIcon icon={faPlus} className="text-sm" />
+              <span className="font-medium">Nova conversa</span>
             </div>
+          </button>
+        </div>
 
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/" className="text-gray-600 hover:text-primary transition">
-                <FontAwesomeIcon icon={faHome} className="mr-2" />
-                Home
-              </Link>
-              <Link href="/dashboard" className="text-gray-600 hover:text-primary transition">
-                <FontAwesomeIcon icon={faChartLine} className="mr-2" />
-                Dashboard
-              </Link>
-              <Link href="/agentes" className="text-primary font-semibold">
-                <FontAwesomeIcon icon={faComments} className="mr-2" />
-                Agentes
-              </Link>
-            </div>
+        {/* Lista de Agentes */}
+        <div className="flex-1 overflow-y-auto p-3 space-y-2">
+          <div className="text-xs font-semibold text-gray-400 px-3 py-2">AGENTES DISPONÍVEIS</div>
+          {Object.entries(agents).map(([key, agentData]) => (
+            <button
+              key={key}
+              onClick={() => {
+                setSelectedAgent(key);
+                setSidebarOpen(false);
+              }}
+              className={`w-full flex items-center space-x-3 p-3 rounded-lg transition ${
+                selectedAgent === key
+                  ? 'bg-gray-800 text-white'
+                  : 'text-gray-300 hover:bg-gray-800'
+              }`}
+            >
+              <div className={`w-8 h-8 bg-gradient-to-br ${agentData.color} rounded-lg flex items-center justify-center shrink-0`}>
+                <FontAwesomeIcon icon={agentData.icon} className="text-white text-sm" />
+              </div>
+              <div className="flex-1 text-left min-w-0">
+                <div className="font-medium text-sm truncate">{agentData.name}</div>
+                <div className="text-xs text-gray-400 truncate">{agentData.description}</div>
+              </div>
+            </button>
+          ))}
+        </div>
 
-            <div className="flex items-center space-x-3">
-              <div>
-                <div className="text-sm font-semibold text-gray-900 text-right">João Silva</div>
-                <div className="text-xs text-gray-500 text-right">Premium Plan</div>
-              </div>
-              <div className="w-10 h-10 gradient-bg rounded-full flex items-center justify-center text-white font-bold">
-                JS
-              </div>
+        {/* Footer da Sidebar */}
+        <div className="p-4 border-t border-gray-700">
+          <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-800">
+            <div className="w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-xs">
+              JS
             </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-medium truncate">João Silva</div>
+              <div className="text-xs text-gray-400">Premium</div>
+            </div>
+            <FontAwesomeIcon icon={faEllipsisV} className="text-gray-400 text-sm" />
           </div>
         </div>
-      </nav>
+      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid lg:grid-cols-4 gap-6 h-[calc(100vh-180px)]">
-          {/* Agents Sidebar */}
-          <div className="lg:col-span-1 bg-white rounded-2xl shadow-lg p-6 overflow-y-auto">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Selecione o Agente</h2>
-
-            <div className="space-y-3">
-              {Object.entries(agents).map(([key, agentData]) => (
-                <button
-                  key={key}
-                  onClick={() => setSelectedAgent(key)}
-                  className={`w-full flex items-center space-x-3 p-4 rounded-xl transition ${
-                    selectedAgent === key
-                      ? `${agentData.bgColor} border-2 border-${agentData.color.split('-')[1]}-500`
-                      : 'bg-gray-50 hover:bg-gray-100'
-                  }`}
-                >
-                  <div className={`w-12 h-12 bg-gradient-to-br ${agentData.color} rounded-xl flex items-center justify-center`}>
-                    <FontAwesomeIcon icon={agentData.icon} className="text-white text-lg" />
-                  </div>
-                  <div className="flex-1 text-left">
-                    <div className="font-bold text-gray-900">{agentData.name}</div>
-                    <div className="text-xs text-gray-600">{agentData.description}</div>
-                  </div>
-                </button>
-              ))}
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Bar */}
+        <div className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition"
+            >
+              <FontAwesomeIcon icon={faBars} className="text-gray-700" />
+            </button>
+            <div className={`w-10 h-10 bg-gradient-to-br ${agent.color} rounded-xl flex items-center justify-center`}>
+              <FontAwesomeIcon icon={agent.icon} className="text-white text-lg" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-900">{agent.name}</h1>
+              <p className="text-xs text-gray-500">{agent.description}</p>
             </div>
           </div>
+          <div className="flex items-center space-x-2">
+            <Link href="/dashboard" className="hidden sm:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition">
+              Dashboard
+            </Link>
+            <Link href="/" className="hidden sm:block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition">
+              Home
+            </Link>
+          </div>
+        </div>
 
-          {/* Chat Area */}
-          <div className="lg:col-span-3 bg-white rounded-2xl shadow-lg flex flex-col">
-            {/* Chat Header */}
-            <div className={`${agent.bgColor} border-b border-gray-200 p-6 rounded-t-2xl`}>
-              <div className="flex items-center space-x-4">
-                <div className={`w-16 h-16 bg-gradient-to-br ${agent.color} rounded-2xl flex items-center justify-center`}>
-                  <FontAwesomeIcon icon={agent.icon} className="text-white text-2xl" />
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900">{agent.name}</h2>
-                  <p className="text-sm text-gray-600">{agent.description}</p>
-                </div>
+        {/* Messages Area */}
+        <div className="flex-1 overflow-y-auto bg-white">
+          {messages.length === 1 ? (
+            // Welcome Screen - estilo ChatGPT
+            <div className="flex flex-col items-center justify-center h-full px-4 py-12">
+              <div className={`w-16 h-16 bg-gradient-to-br ${agent.color} rounded-2xl flex items-center justify-center mb-6`}>
+                <FontAwesomeIcon icon={agent.icon} className="text-white text-3xl" />
+              </div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-3 text-center">Como posso ajudar?</h2>
+              <p className="text-gray-600 text-center max-w-2xl mb-8">{agent.greeting}</p>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full max-w-4xl">
+                {quickSuggestions[selectedAgent as keyof typeof quickSuggestions].map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInputText(suggestion)}
+                    className="p-4 bg-gray-50 hover:bg-gray-100 rounded-xl text-left transition border border-gray-200"
+                  >
+                    <div className="font-medium text-gray-900 mb-1">{suggestion}</div>
+                    <div className="text-xs text-gray-500">Clique para usar</div>
+                  </button>
+                ))}
               </div>
             </div>
-
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          ) : (
+            // Messages List
+            <div className="max-w-3xl mx-auto py-8 px-4">
               {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[70%] p-4 rounded-2xl ${
-                      message.sender === 'user'
-                        ? 'bg-gradient-to-r from-primary to-secondary text-white'
-                        : `${agent.bgColor} text-gray-900`
-                    }`}
-                  >
-                    <p className="text-sm leading-relaxed">{message.text}</p>
-                    <span
-                      className={`text-xs mt-2 block ${
-                        message.sender === 'user' ? 'text-white/70' : 'text-gray-500'
-                      }`}
-                    >
-                      {message.timestamp.toLocaleTimeString('pt-BR', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
+                <div key={message.id} className={`mb-8 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`flex gap-4 max-w-full ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    {/* Avatar */}
+                    <div className="shrink-0">
+                      {message.sender === 'agent' ? (
+                        <div className={`w-8 h-8 bg-gradient-to-br ${agent.color} rounded-lg flex items-center justify-center`}>
+                          <FontAwesomeIcon icon={agent.icon} className="text-white text-sm" />
+                        </div>
+                      ) : (
+                        <div className="w-8 h-8 gradient-bg rounded-lg flex items-center justify-center text-white font-bold text-xs">
+                          JS
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Message Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className={`${message.sender === 'user' ? 'text-right' : 'text-left'} mb-1`}>
+                        <span className="text-xs font-medium text-gray-500">
+                          {message.sender === 'user' ? 'Você' : agent.name}
+                        </span>
+                      </div>
+                      <div className={`prose max-w-none ${message.sender === 'user' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-900'} rounded-2xl px-4 py-3`}>
+                        <p className="text-sm leading-relaxed m-0 whitespace-pre-wrap">{message.text}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ))}
 
               {isTyping && (
-                <div className="flex justify-start">
-                  <div className={`${agent.bgColor} p-4 rounded-2xl`}>
-                    <div className="flex space-x-2">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                <div className="mb-8 flex justify-start">
+                  <div className="flex gap-4">
+                    <div className={`w-8 h-8 bg-gradient-to-br ${agent.color} rounded-lg flex items-center justify-center shrink-0`}>
+                      <FontAwesomeIcon icon={agent.icon} className="text-white text-sm" />
+                    </div>
+                    <div className="bg-gray-100 rounded-2xl px-4 py-3">
+                      <div className="flex space-x-2">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -335,54 +373,57 @@ function AgentesContent() {
 
               <div ref={messagesEndRef} />
             </div>
+          )}
+        </div>
 
-            {/* Quick Suggestions */}
-            <div className="px-6 pb-4">
-              <div className="flex gap-2 flex-wrap">
-                {quickSuggestions[selectedAgent as keyof typeof quickSuggestions].map((suggestion, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setInputText(suggestion)}
-                    className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-sm text-gray-700 rounded-lg transition"
-                  >
-                    {suggestion}
-                  </button>
-                ))}
-              </div>
+        {/* Input Area - estilo ChatGPT */}
+        <div className="bg-white border-t border-gray-200 p-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="relative bg-white border border-gray-300 rounded-2xl shadow-lg focus-within:border-gray-400 transition">
+              <textarea
+                ref={textareaRef}
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                onKeyDown={handleKeyPress}
+                placeholder={`Mensagem para ${agent.name}...`}
+                rows={1}
+                className="w-full px-4 py-3 pr-12 bg-transparent border-none focus:outline-none resize-none max-h-48 text-gray-900 placeholder-gray-400"
+                style={{ minHeight: '24px' }}
+              />
+              <button
+                onClick={handleSend}
+                disabled={!inputText.trim()}
+                className={`absolute right-2 bottom-2 w-8 h-8 rounded-lg flex items-center justify-center transition ${
+                  inputText.trim()
+                    ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                }`}
+              >
+                <FontAwesomeIcon icon={faArrowUp} className="text-sm" />
+              </button>
             </div>
-
-            {/* Input Area */}
-            <div className="border-t border-gray-200 p-6">
-              <div className="flex space-x-4">
-                <input
-                  type="text"
-                  value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder={`Pergunte algo para o ${agent.name}...`}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-                <button
-                  onClick={handleSend}
-                  disabled={!inputText.trim()}
-                  className="px-6 py-3 gradient-bg text-white rounded-xl font-semibold hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
-              </div>
-            </div>
+            <p className="text-xs text-gray-500 text-center mt-3">
+              {agent.name} pode cometer erros. Verifique informações importantes.
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Overlay para fechar sidebar em mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 }
 
-// Componente principal com Suspense
 export default function Agentes() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Carregando agentes...</p>

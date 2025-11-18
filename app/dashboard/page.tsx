@@ -108,11 +108,11 @@ export default function Dashboard() {
       <nav className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 gradient-bg rounded-xl flex items-center justify-center">
-                <FontAwesomeIcon icon={faRobot} className="text-white text-xl" />
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 gradient-bg rounded-xl flex items-center justify-center">
+                <FontAwesomeIcon icon={faRobot} className="text-white text-lg sm:text-xl" />
               </div>
-              <span className="text-2xl font-bold gradient-text">WorkMate AI</span>
+              <span className="text-xl sm:text-2xl font-bold gradient-text">WorkMate AI</span>
             </div>
 
             <div className="hidden md:flex items-center space-x-6">
@@ -130,12 +130,12 @@ export default function Dashboard() {
               </Link>
             </div>
 
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <button className="relative p-2 text-gray-600 hover:text-primary transition">
-                <FontAwesomeIcon icon={faBell} className="text-xl" />
+                <FontAwesomeIcon icon={faBell} className="text-lg sm:text-xl" />
                 <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
-              <div className="flex items-center space-x-3">
+              <div className="hidden sm:flex items-center space-x-3">
                 <div>
                   <div className="text-sm font-semibold text-gray-900 text-right">João Silva</div>
                   <div className="text-xs text-gray-500 text-right">Premium Plan</div>
@@ -144,23 +144,26 @@ export default function Dashboard() {
                   JS
                 </div>
               </div>
+              <div className="sm:hidden w-8 h-8 gradient-bg rounded-full flex items-center justify-center text-white font-bold text-xs">
+                JS
+              </div>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Welcome Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Bem-vindo de volta, João! 👋
           </h1>
-          <p className="text-lg text-gray-600">Aqui está o resumo da sua produtividade hoje</p>
+          <p className="text-base sm:text-lg text-gray-600">Aqui está o resumo da sua produtividade hoje</p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition">
             <div className="flex items-center justify-between mb-4">
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
@@ -215,19 +218,20 @@ export default function Dashboard() {
         </div>
 
         {/* Main Grid */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Left Column */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8">
             {/* AI Activity */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 flex items-center">
-                  <FontAwesomeIcon icon={faRobot} className="text-primary mr-3" />
-                  Atividade dos Agentes
+            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center">
+                  <FontAwesomeIcon icon={faRobot} className="text-primary mr-2 sm:mr-3" />
+                  <span className="hidden sm:inline">Atividade dos Agentes</span>
+                  <span className="sm:hidden">Agentes</span>
                 </h2>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-start space-x-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl hover:shadow-md transition cursor-pointer">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shrink-0">
                     <FontAwesomeIcon icon={faChartBar} className="text-white text-lg" />
@@ -288,19 +292,20 @@ export default function Dashboard() {
             </div>
 
             {/* Chart */}
-            <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-                <FontAwesomeIcon icon={faChartLine} className="text-primary mr-3" />
-                Produtividade da Semana
+            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                <FontAwesomeIcon icon={faChartLine} className="text-primary mr-2 sm:mr-3" />
+                <span className="hidden sm:inline">Produtividade da Semana</span>
+                <span className="sm:hidden">Produtividade</span>
               </h2>
-              <div className="h-80">
+              <div className="h-64 sm:h-80">
                 <canvas ref={chartRef}></canvas>
               </div>
             </div>
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Quick Access */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
